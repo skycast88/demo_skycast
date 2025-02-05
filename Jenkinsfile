@@ -11,7 +11,7 @@ pipeline {
                 script {
                     // Checkout code from GitLab repository
                     checkout([
-                        $class: 'GitHub',
+                        $class: 'GitSCM',
                         branches: [[name: 'main']],
                         userRemoteConfigs: [[
                             url: 'https://github.com/skycast88/demo_skycast.git',    
