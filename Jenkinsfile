@@ -26,9 +26,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'npm install' // Install Node.js dependencies
+                        echo 'Hello World'
                     } else {
-                        bat 'npm install'
+                        echo 'Hello Jenkins'
                     }
                 }
             }
