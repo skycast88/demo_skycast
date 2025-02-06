@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'Sonarqube' // The name of the SonarQube server defined in Jenkins
+        SONARQUBE_URL = 'http://localhost:9000'
+        SONARQUBE = 'LocalSonarQube' // The name of the SonarQube server defined in Jenkins
         SONAR_SCANNER_HOME = '/opt/sonar-scanner/bin' // Path to your local SonarQube Scanner installation
         NODEJS = "C:\\Program Files\\nodejs;${env.PATH}"
     }
@@ -39,9 +40,14 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarQubeScanner'
-                    withSonarQubeEnv('LocalSonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                    // Run SonarQube analysis using Docker
+                    docker.image('sonarsource/sonar-scanner-cli').inside {
+                        sh """
+                            sonar-scanner \
+                            -Dsonar.projectKey=com.skycast \
+                            -Dsonar.sources=src \
+                            -Dsonar.host.url=$SONARQUBE_URL \
+                        """
                     }
                 }
             }
