@@ -27,9 +27,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        npm install
+                        sh 'npm run build'
                     } else {
-                        npm install
+                        bat 'npm run build'
                     }
                 }
             }
