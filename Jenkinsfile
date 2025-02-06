@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV = 'test' // Set Node.js environment to 'test'
+        SONARQUBE = 'Sonarqube' // The name of the SonarQube server defined in Jenkins
+        SONAR_SCANNER_HOME = 'C:\\sonar-scanner' // Path to your local SonarQube Scanner installation
     }
 
     stages {
@@ -22,13 +23,34 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
                 script {
                     if (isUnix()) {
-                        echo 'Hello World'
+                        npm install
                     } else {
-                        echo 'Hello Jenkins'
+                        npm install
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Run the SonarQube analysis
+                    withSonarQubeEnv(SONARQUBE) {
+                        if (isUnix()) {
+                            sh '''sonar-scanner \
+                                -Dsonar.projectKey=com.skycast \
+                                -Dsonar.projectName="Skycast" \
+                                -Dsonar.sources=src'''
+                        } else {
+                            bat '''sonar-scanner \
+                                -Dsonar.projectKey=com.skycast \
+                                -Dsonar.projectName="Skycast" \
+                                -Dsonar.sources=src'''
+                        }
                     }
                 }
             }
