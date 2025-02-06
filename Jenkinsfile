@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONARQUBE = 'Sonarqube' // The name of the SonarQube server defined in Jenkins
-        SONAR_SCANNER_HOME = 'C:\\sonar-scanner' // Path to your local SonarQube Scanner installation
+        SONAR_SCANNER_HOME = '/opt/sonar-scanner/bin' // Path to your local SonarQube Scanner installation
         NODEJS = "C:\\Program Files\\nodejs;${env.PATH}"
     }
 
