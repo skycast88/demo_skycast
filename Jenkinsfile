@@ -39,19 +39,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Run the SonarQube analysis
-                    withSonarQubeEnv(SONARQUBE) {
-                        if (isUnix()) {
-                            sh '''sonar-scanner \
-                                -Dsonar.projectKey=com.skycast \
-                                -Dsonar.projectName="Skycast" \
-                                -Dsonar.sources=src'''
-                        } else {
-                            bat '''sonar-scanner \
-                                -Dsonar.projectKey=com.skycast \
-                                -Dsonar.projectName="Skycast" \
-                                -Dsonar.sources=src'''
-                        }
+                    def scannerHome = tool 'SonarQubeScanner'
+                    withSonarQubeEnv('LocalSonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
