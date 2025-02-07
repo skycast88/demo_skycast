@@ -2,9 +2,6 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'
-        SONARQUBE = 'LocalSonarQube' // The name of the SonarQube server defined in Jenkins
-        SONAR_SCANNER_HOME = '/opt/sonar-scanner/bin' // Path to your local SonarQube Scanner installation
         NODEJS = "C:\\Program Files\\nodejs;${env.PATH}"
     }
 
@@ -18,7 +15,7 @@ pipeline {
                         branches: [[name: 'main']],
                         userRemoteConfigs: [[
                             url: 'https://github.com/skycast88/demo_skycast.git',    
-                            credentialsId: '02fcd2c0-a404-4be0-8216-2e51edf0b945' // Replace with your Jenkins credentials ID
+                            credentialsId: 'd438b28d-8ef3-4d75-b3ec-e5247bb025f3' // Replace with your Jenkins credentials ID
                         ]]
                     ])
                 }
@@ -32,22 +29,6 @@ pipeline {
                         sh 'npm run build'
                     } else {
                         bat 'npm run build'
-                    }
-                }
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    // Run SonarQube analysis using Docker
-                    docker.image('sonarsource/sonar-scanner-cli').inside {
-                        sh """
-                            sonar-scanner \
-                            -Dsonar.projectKey=com.skycast \
-                            -Dsonar.sources=src \
-                            -Dsonar.host.url=$SONARQUBE_URL \
-                        """
                     }
                 }
             }
